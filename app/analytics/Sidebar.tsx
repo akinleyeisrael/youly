@@ -20,7 +20,7 @@ import React, { createContext, useContext, useEffect, useRef, useState } from "r
 export const SidebarNav = () => {
 
     const { isOpen, toggleSidebar } = useSidebar();
-    const sidebarRef = useRef<HTMLElement | null>(null);
+    const sidebarRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
