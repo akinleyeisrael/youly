@@ -15,13 +15,25 @@ import { link } from "fs";
 import { useAtom } from "jotai";
 import Image from "next/image";
 import Link from "next/link";
-import React, { createContext, useContext, useState } from "react";
-
-
+import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 
 export const SidebarNav = () => {
 
     const { isOpen, toggleSidebar } = useSidebar();
+    const sidebarRef = useRef<HTMLElement | null>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+                toggleSidebar();
+            }
+        };
+
+        document.addEventListener('click', handleClickOutside);
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, [toggleSidebar]);
 
     const links = [
         { label: "Dashboard", href: "/analytics/dashboard", icon: HomeIcon },
@@ -31,7 +43,7 @@ export const SidebarNav = () => {
 
     return (
 
-        <div className={`${isOpen ? "block" : "hidden"} sm:block w-[320px] fixed left-0 top-0 bg-secondary text-primary`}>
+        <div ref={sidebarRef} className={`${isOpen ? "block" : "hidden"} sm:block w-[320px] fixed left-0 top-0 bg-secondary text-primary`}>
             <div className="h-screen flex flex-col">
                 <div className="flex items-center justify-between h-20 px-8">
                     <Link className="flex items-center gap-2 font-semibold" href="#">

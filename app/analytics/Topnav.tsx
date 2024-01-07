@@ -18,9 +18,9 @@ const Topnav = () => {
     const { isOpen, toggleSidebar } = useSidebar();
 
     return (
-        <div className="fixed bg-secondary text-muted-foreground flex max-w-[76rem]  w-full mx-auto items-center justify-start px-4 py-2 space-x-2 sm:ml-[20rem]">
+        <div className="fixed bg-secondary text-muted-foreground flex max-w-[76rem] w-full mx-auto items-center justify-start px-4 py-2 space-x-2 sm:ml-[20rem]">
             <div className="sm:hidden">
-                <Hamburger size={12} toggled={isOpen} toggle={toggleSidebar} />
+                <Hamburger size={16} toggled={isOpen} toggle={toggleSidebar} />
             </div>
             <button className="bg-card p-2 rounded-xl hover:shadow-sm">
                 <ArrowLeftIcon />
