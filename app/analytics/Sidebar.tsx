@@ -42,7 +42,6 @@ export const SidebarNav = () => {
     ];
 
     return (
-
         <div ref={sidebarRef} className={`${isOpen ? "block" : "hidden"} sm:block w-[320px] fixed left-0 top-0 bg-secondary text-primary`}>
             <div className="h-screen flex flex-col">
                 <div className="flex items-center justify-between h-20 px-8">
