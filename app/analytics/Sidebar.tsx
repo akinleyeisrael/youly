@@ -1,4 +1,5 @@
 "use client";
+import { sidebarAtom } from "@/components/atom";
 import { useSidebar } from "@/components/sidebarContext";
 import {
     BarChartIcon,
@@ -11,9 +12,11 @@ import {
 } from "@radix-ui/react-icons";
 import { IconProps } from "@radix-ui/react-icons/dist/types";
 import { link } from "fs";
+import { useAtom } from "jotai";
 import Image from "next/image";
 import Link from "next/link";
 import React, { createContext, useContext, useState } from "react";
+
 
 
 export const SidebarNav = () => {
@@ -37,9 +40,9 @@ export const SidebarNav = () => {
                             Youly <p className="text-muted-foreground text-xs">analytics</p>
                         </span>
                     </Link>
-                    {/* <div onClick={toggleSidebar}>
+                    <div className="sm:hidden" onClick={toggleSidebar}>
                         <Cross1Icon />
-                    </div> */}
+                    </div>
                 </div>
                 <nav className="flex-1 overflow-y-auto px-8 pl-2 pt-4">
                     <ul className="space-y-4">
