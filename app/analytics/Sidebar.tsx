@@ -52,7 +52,7 @@ export const SidebarNav = () => {
                         </span>
                     </Link>
                     <div className="sm:hidden" onClick={toggleSidebar}>
-                        <Cross1Icon />
+                        <Cross1Icon /> 
                     </div>
                 </div>
                 <nav className="flex-1 overflow-y-auto px-8 pl-2 pt-4">
