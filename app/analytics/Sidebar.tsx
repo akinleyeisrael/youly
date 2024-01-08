@@ -24,7 +24,7 @@ export const SidebarNav = () => {
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+            if (isOpen && sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
                 toggleSidebar();
             }
         };
@@ -33,7 +33,7 @@ export const SidebarNav = () => {
         return () => {
             document.removeEventListener('click', handleClickOutside);
         };
-    }, [toggleSidebar]);
+    }, [isOpen, toggleSidebar]);
 
     const links = [
         { label: "Dashboard", href: "/analytics/dashboard", icon: HomeIcon },
