@@ -1,26 +1,22 @@
 "use client";
-import { sidebarAtom } from "@/components/atom";
-import { useSidebar } from "@/components/sidebarContext";
+import { useSidebar } from "@/lib/sidebarContext";
 import {
-    BarChartIcon,
-    BoxIcon,
     Cross1Icon,
     DashboardIcon,
-    HomeIcon,
-    PersonIcon,
-    StackIcon,
+    HomeIcon
 } from "@radix-ui/react-icons";
-import { IconProps } from "@radix-ui/react-icons/dist/types";
-import { link } from "fs";
-import { useAtom } from "jotai";
 import Image from "next/image";
 import Link from "next/link";
-import React, { createContext, useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import { AnimatePresence, motion } from 'framer-motion';
+
 
 export const SidebarNav = () => {
 
-    const { isOpen, toggleSidebar } = useSidebar();
+    const { isOpen, toggleSidebar } = useSidebar();   //false by default
     const sidebarRef = useRef<HTMLDivElement | null>(null);
+
+
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -41,8 +37,11 @@ export const SidebarNav = () => {
         { label: "Dashboard", href: "/analytics/dashboard", icon: HomeIcon },
     ];
 
+
+
     return (
-        <div ref={sidebarRef} className={`${isOpen ? "block" : "hidden"} sm:block w-[320px] fixed left-0 top-0 bg-secondary text-primary`}>
+        //make this sidebar open
+        <div ref={sidebarRef} className={`sidebar ${isOpen ? "sidebar-block" : "hidden"} sm:block w-[320px] fixed left-0 top-0 bg-secondary text-primary`}>
             <div className="h-screen flex flex-col">
                 <div className="flex items-center justify-between h-20 px-8">
                     <Link className="flex items-center gap-2 font-semibold" href="#">
@@ -52,7 +51,7 @@ export const SidebarNav = () => {
                         </span>
                     </Link>
                     <div className="sm:hidden" onClick={toggleSidebar}>
-                        <Cross1Icon /> 
+                        <Cross1Icon />
                     </div>
                 </div>
                 <nav className="flex-1 overflow-y-auto px-8 pl-2 pt-4">

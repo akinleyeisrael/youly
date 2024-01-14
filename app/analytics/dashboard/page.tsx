@@ -1,10 +1,17 @@
+
 import React from 'react'
+import { DashboardForm } from './form'
+import { getVideoAnalytics } from '@/lib/actions'
+import { useAtom } from 'jotai';
+import { analyticsAtom } from '@/lib/atom';
+import { ViewAnalytics } from './VewAnalytics';
 
 
-const Dashboard = () => {
+const Dashboard = async () => {
+
     return (
         <div>
-
+            <ViewAnalytics />
         </div>
     )
 }
