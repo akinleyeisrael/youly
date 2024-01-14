@@ -3,8 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
     try {
-        const videoId = request.nextUrl.searchParams.get('vidoId');
-        console.log("url params search", videoId)
+
+        const videoId = request.nextUrl.searchParams.get('videoId');
+        console.log("url params search", videoId);
 
         const response = await axios.get(
             "https://www.googleapis.com/youtube/v3/videos/",
@@ -17,21 +18,20 @@ export async function GET(request: NextRequest) {
             }
         );
 
-        console.log(response);
-        console.log(response.data);
+        const items = response.data.items;
 
-        // Handle the response and extract the view count and other analytics data
-        const { items } = response.data;
-
-        const { viewCount, likeCount, dislikeCount } = items[0].statistics;
-
-        return NextResponse.json({
-            viewCount,
-            likeCount,
-            dislikeCount,
-        });
+        if (items && items.length > 0 && items[0].statistics) {
+            const { viewCount, likeCount, dislikeCount } = items[0].statistics;
+            return NextResponse.json({
+                viewCount,
+                likeCount,
+                dislikeCount,
+            });
+        } else {
+            return NextResponse.json("error");
+        }
     } catch (error) {
         console.error("Error fetching video analytics:", error);
-        return { viewCount: 0, likeCount: 0, dislikeCount: 0 };
+        return NextResponse.error();
     }
 }

@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Sidebar from "./Sidebar";
-import Topnav from "./Topnav";
 import { SidebarProvider } from "@/lib/sidebarContext";
+import Topnav from "./Topnav";
 
 // export const metadata: Metadata = {
 //     title: "Akinola Akinleye",
