@@ -22,8 +22,8 @@ export const ViewAnalytics = () => {
 
     const { data, isLoading, isError, isPending } = useQuery<YoutubeResource>({
         queryKey: ["viewCount", videoId], // Include videoId in the queryKey
-        queryFn: () =>
-            axios.get(`/api/youtube?videoId=${videoId}`).then((res) => res.data),
+        queryFn: async () =>
+            await axios.get(`/api/youtube?videoId=${videoId}`).then((res) => res.data),
         staleTime: 60 * 1000,
         retry: 3,
     });

@@ -1,9 +1,10 @@
+export const dynamic = 'force-dynamic'
 import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
     try {
-        const videoId = request.nextUrl.searchParams.get('videoId') as string;
+        const videoId = request.nextUrl.searchParams.get('videoId');
         console.log("url params search", videoId);
 
         const response = await axios.get(
