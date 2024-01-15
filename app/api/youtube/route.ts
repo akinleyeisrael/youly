@@ -21,12 +21,12 @@ export async function GET(request: NextRequest) {
         const items = response.data.items;
 
         if (items && items.length > 0 && items[0].statistics) {
-            const { viewCount, likeCount, dislikeCount } = items[0].statistics;
+            const { viewCount, likeCount, favoriteCount, commentCount } = items[0].statistics;
             return NextResponse.json({
                 viewCount,
                 likeCount,
-                dislikeCount,
-
+                favoriteCount,
+                commentCount
             }, { status: 200 });
         } else {
             return NextResponse.json("error");
