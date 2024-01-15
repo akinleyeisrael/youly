@@ -28,6 +28,10 @@ const config = {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
         },
+        mountain_meadow: {
+          DEFAULT: "hsl(var(--mountain_meadow))",
+          foreground: "hsl(var(--mountain_meadow-foreground))",
+        },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",

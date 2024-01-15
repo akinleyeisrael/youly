@@ -17,7 +17,7 @@ export default function AnalyticsLayout({
     children: React.ReactNode;
 }) {
     return (
-        <section>
+        <section className="h-screen">
             <VideoIdProvider>
                 <SidebarProvider>
                     <Topnav />

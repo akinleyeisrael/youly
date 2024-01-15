@@ -1,30 +1,34 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
+import { IconCommentDots, VideoIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getVideoAnalytics } from "@/lib/actions";
-import { analyticsAtom } from "@/lib/atoms";
-import { VideoIdProvider, useVideoId } from "@/lib/videoIdContext";
+import { useVideoId } from "@/lib/videoIdContext";
+import { BellIcon, BoxIcon, ClockIcon, EyeOpenIcon, HeartIcon, PlayIcon, Share1Icon, StarIcon, TextIcon } from "@radix-ui/react-icons";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { atom, useAtom } from "jotai";
-import { useEffect, useState } from "react";
+import Image from "next/image";
+import { useState } from "react";
 import {
     Bar,
     BarChart,
     CartesianGrid,
-    Label,
     Legend,
     Line,
     LineChart,
     ResponsiveContainer,
     Tooltip,
     XAxis,
-    YAxis,
+    YAxis
 } from "recharts";
+import { AiOutlineComment, AiOutlineLike, AiOutlineMessage, AiOutlineVideoCamera } from "react-icons/ai"
+import YoutubeLite from "@/components/ui/YoutubeLite";
+import React from "react";
+import LiteYouTubeEmbed from 'react-lite-youtube-embed';
+import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
 
 interface YoutubeResource {
     viewCount: number;
@@ -47,9 +51,11 @@ export const ViewAnalytics = () => {
         retry: 3,
     });
 
+
+
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setVideoId(inputVideoId);
+        setVideoId(inputVideoId as string);
     };
 
     if (isLoading) return <Skeleton />;
@@ -58,140 +64,126 @@ export const ViewAnalytics = () => {
 
     const chartData = [
         { name: "Views", value: data?.viewCount },
-        { name: "Likes", value: data?.likeCount || 0 },
-        { name: "Favorites", value: data?.favoriteCount || 0 },
-        { name: "Comments", value: data?.commentCount || 0 },
+        { name: "Likes", value: data?.likeCount },
+        { name: "Favorites", value: data?.favoriteCount },
+        { name: "Comments", value: data?.commentCount },
     ];
+    const totalNum = (data?.commentCount || 0) + (data?.viewCount || 0) + (data?.favoriteCount || 0) + (data?.likeCount || 0);
     return (
-        <div className="mx-auto items-center flex flex-col">
-            <div className="mt-[4rem]">
-                <form onSubmit={onSubmit} className="block">
-                    <div className="flex items-center space-x-2">
-                        <Input
-                            value={inputVideoId}
-                            placeholder="Youtube ID"
-                            onChange={(e) => setInputVideoId(e.target.value)}
-                            type="text"
-                            className="w-[20rem]"
-                        />
-                        <Button type="submit">search</Button>
-                    </div>
-                </form>
-            </div>
-            <div className="pl-40 pt-6">
-                <Card className="w-[60rem] p-6 px-6">
+        <div className="mx-auto items-center flex flex-col pl-4 lg:pl-32 xl:pl-[20rem]">
+            <Card className="w-full lg:w-[72rem] mt-16 mx-auto items-center flex-1 px-5">
+                <div className="mt-8 lg:mt-[2rem]">
+                    <form onSubmit={onSubmit} className="w-full ">
+                        <div className="flex items-center space-x-4 justify-center">
+                            <Input
+                                value={inputVideoId}
+                                placeholder="Youtube ID"
+                                onChange={(e) => setInputVideoId(e.target.value)}
+                                type="text"
+                                className="w-full lg:w-[20rem]"
+                            />
+                            <Button type="submit">Search</Button>
+                        </div>
+                    </form>
+                </div>
+                <div className="mt-8">
                     <ResponsiveContainer width="100%" height={200}>
                         <BarChart data={chartData}>
-                            <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="name" />
                             <YAxis />
                             <Tooltip />
-                            <Legend />
-                            <Bar dataKey="value" style={{ fill: "hsl(var(--primary))" }} />
+                            <Legend/>
+                            <Bar dataKey="value" fill="hsl(var(--mountain_meadow))" />
                         </BarChart>
                     </ResponsiveContainer>
 
                     <ResponsiveContainer width="100%" height={200}>
                         <LineChart data={chartData}>
-                            <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="name" />
                             <YAxis />
                             <Tooltip />
-                            <Legend />
-                            <Line
-                                type="step"
-                                dataKey="value"
-                                stroke="#8884d8"
-                                strokeWidth={2}
-                            />
+                            <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
                         </LineChart>
                     </ResponsiveContainer>
-                </Card>
-                <Tabs defaultValue="account" className="w-[400px]">
-                    <TabsList className="grid w-full grid-cols-3">
-                        <TabsTrigger value="account">Account</TabsTrigger>
-                        <TabsTrigger value="password">Password</TabsTrigger>
-                        <TabsTrigger value="ai">ai</TabsTrigger>
-                    </TabsList>
-                    <TabsContent value="account">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>Account</CardTitle>
-                                <CardDescription>
-                                    Make changes to your account here. Click save when youre done.
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent className="space-y-2">
-                                <div className="space-y-1">
-                                    <Label >Name</Label>
-                                    <Input id="name" defaultValue="Pedro Duarte" />
+
+                    <Tabs defaultValue="overview" className="pt-4">
+                        <TabsList className="grid w-full grid-cols-3">
+                            <TabsTrigger value="overview">Overview</TabsTrigger>
+                            <TabsTrigger value="analytics">Video Analytics</TabsTrigger>
+                            <TabsTrigger value="ai">AI Analysis</TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="overview">
+                            <div className="w-full p-4 grid gap-4">
+                                <div className="relative group">
+                                    <YoutubeLite id={videoId} thumbnail={""} title={""} />
                                 </div>
-                                <div className="space-y-1">
-                                    <Label>Username</Label>
-                                    <Input id="username" defaultValue="@peduarte" />
+                                <div className="space-y-2">
+                                    <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+
+                                        <div className="flex items-center gap-1">
+                                            <EyeOpenIcon className="h-4 w-4" />
+                                            <span>{data?.viewCount} views</span>
+                                        </div>
+                                        <div className="flex items-center gap-1">
+                                            <HeartIcon className="h-4 w-4" />
+                                            <span>{data?.likeCount} likes</span>
+                                        </div>
+                                        <div className="flex items-center gap-1">
+                                            <TextIcon className="h-4 w-4" />
+                                            <span>{data?.commentCount} comments</span>
+                                        </div>
+                                    </div>
                                 </div>
-                            </CardContent>
-                            <CardFooter>
-                                <Button>Save changes</Button>
-                            </CardFooter>
-                        </Card>
-                    </TabsContent>
-                    <TabsContent value="password">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>Password</CardTitle>
-                                <CardDescription>
-                                    Change your password here. After saving, you'll be logged out.
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent className="space-y-2">
-                                <div className="space-y-1">
-                                    <Label >Current password</Label>
-                                    <Input id="current" type="password" />
+
+                            </div>
+
+                        </TabsContent>
+                        <TabsContent value="analytics">
+                            <div className="w-full p-10 grid gap-10">
+                                <div className="flex flex-col items-center space-y-0 gap-4 p-0">
+                                    <div className="grid gap-1 text-center">
+                                        <p className="text-xs">Views, Likes, Comments, favorites</p>
+                                    </div>
+                                    <div className="bg-gray-100 px-3 rounded-full flex items-center py-2 dark:bg-gray-800">
+                                        <AiOutlineVideoCamera className="w-6 h-6 fill-primary" />
+                                        <span className="text-sm ml-4 text-gray-500 dark:text-gray-400">{totalNum}</span>
+                                    </div>
+                                    <div className="p-0 grid gap-4">
+                                        <div className="flex items-center gap-4 text-sm">
+                                            <div className="flex gap-2 items-center">
+                                                <HeartIcon className="w-4 h-4 shrink-0 fill-primary" />
+                                                <span className="text-gray-500 dark:text-gray-400">{data?.viewCount}</span>
+                                            </div>
+                                            <div className="flex gap-2 items-center">
+                                                <HeartIcon className="w-4 h-4 shrink-0 fill-primary" />
+                                                <span className="text-gray-500 dark:text-gray-400">{data?.likeCount}</span>
+                                            </div>
+                                            <div className="flex gap-2 items-center">
+                                                <AiOutlineComment className="w-4 h-4 shrink-0 fill-primary" />
+                                                <span className="text-gray-500 dark:text-gray-400">{data?.commentCount}</span>
+                                            </div>
+                                            <div className="flex gap-2 items-center">
+                                                <StarIcon className="w-4 h-4 shrink-0 fill-primary" />
+                                                <span className="text-gray-500 dark:text-gray-400">{data?.favoriteCount}</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="space-y-1">
-                                    <Label >New password</Label>
-                                    <Input id="new" type="password" />
-                                </div>
-                            </CardContent>
-                            <CardFooter>
-                                <Button>Save password</Button>
-                            </CardFooter>
-                        </Card>
-                    </TabsContent>
-                    <TabsContent value="ai">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>Password</CardTitle>
-                                <CardDescription>
-                                    Change your password here. After saving, you'll be logged out.
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent className="space-y-2">
-                                <div className="space-y-1">
-                                    <Label >Current password</Label>
-                                    <Input id="current" type="password" />
-                                </div>
-                                <div className="space-y-1">
-                                    <Label >New password</Label>
-                                    <Input id="new" type="password" />
-                                </div>
-                            </CardContent>
-                            <CardFooter>
-                                <Button>Save password</Button>
-                            </CardFooter>
-                        </Card>
-                    </TabsContent>
-                </Tabs>
-            
+                            </div>
+
+
+                        </TabsContent>
+                        <TabsContent value="ai">23333333333</TabsContent>
+                    </Tabs>
+                </div>
+            </Card >
+        </div >
 
 
 
-                viewcount - {data?.viewCount}
-                likecount -{data?.likeCount}
-                favoriteCount - {data?.favoriteCount}
-                comments - {data?.commentCount}
-            </div>
-        </div>
+
+
+
+
     );
 };
