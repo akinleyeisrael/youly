@@ -3,8 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
     try {
-
-        const videoId = request.nextUrl.searchParams.get('videoId');
+        const videoId = request.nextUrl.searchParams.get('videoId') as string;
         console.log("url params search", videoId);
 
         const response = await axios.get(
@@ -26,7 +25,8 @@ export async function GET(request: NextRequest) {
                 viewCount,
                 likeCount,
                 dislikeCount,
-            });
+
+            }, { status: 200 });
         } else {
             return NextResponse.json("error");
         }

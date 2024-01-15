@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import Sidebar from "./Sidebar";
 import { SidebarProvider } from "@/lib/sidebarContext";
 import Topnav from "./Topnav";
+import { VideoIdProvider } from "@/lib/videoIdContext";
 
 // export const metadata: Metadata = {
 //     title: "Akinola Akinleye",
@@ -17,11 +18,13 @@ export default function AnalyticsLayout({
 }) {
     return (
         <section>
-            <SidebarProvider>
-                <Topnav />
-                <Sidebar />
-                {children}
-            </SidebarProvider>
+            <VideoIdProvider>
+                <SidebarProvider>
+                    <Topnav />
+                    <Sidebar />
+                    {children}
+                </SidebarProvider>
+            </VideoIdProvider>
         </section>
     );
 }

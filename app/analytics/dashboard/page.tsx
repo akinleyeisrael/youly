@@ -1,19 +1,19 @@
 
-// import React from 'react'
-// import { DashboardForm } from './form'
-// import { getVideoAnalytics } from '@/lib/actions'
-// import { useAtom } from 'jotai';
-// import { analyticsAtom } from '@/lib/atom';
-// import { ViewAnalytics } from './VewAnalytics';
+import React from 'react'
+import { DashboardForm } from './form'
+import { getVideoAnalytics } from '@/lib/actions'
+import { useAtom } from 'jotai';
+import { analyticsAtom } from '@/lib/atoms';
+import { ViewAnalytics } from './VewAnalytics';
 
 
-// const Dashboard = async () => {
+const Dashboard = async () => {
 
-//     return (
-//         <div>
-//             <ViewAnalytics />
-//         </div>
-//     )
-// }
+    return (
+        <div>
+            <ViewAnalytics/>
+        </div>
+    )
+}
 
-// export default Dashboard
+export default Dashboard
