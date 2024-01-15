@@ -1,4 +1,4 @@
-
+export const dynamic = 'force-dynamic'
 import React from 'react'
 import { DashboardForm } from './form'
 import { getVideoAnalytics } from '@/lib/actions'
