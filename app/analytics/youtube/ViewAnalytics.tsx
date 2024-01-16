@@ -29,26 +29,23 @@ import YoutubeLite from "@/lib/YoutubeLite";
 import React from "react";
 import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
-import { useAtom } from "jotai";
-import { githubAtom } from "@/lib/atoms";
 
-
-interface YoutubeResource {
+interface GithubResource {
     viewCount: number;
     likeCount: number;
     favoriteCount: number;
     commentCount: number;
 }
 
-export const ViewAnalytics = () => {
-    const [githubId, setGitHubId] = useAtom(githubAtom)
-    const [inputGithubId, setInputGithubId] = useState("");
+export const ViewAnalyticsYoutube = () => {
+    const { videoId, setVideoId } = useVideoId();
+    const [inputVideoId, setInputVideoId] = useState("");
 
-    const { data, isLoading, isError, isPending } = useQuery<YoutubeResource>({
-        queryKey: ["viewCount", githubId], // Include videoId in the queryKey
+    const { data, isLoading, isError, isPending } = useQuery<GithubResource>({
+        queryKey: ["viewCount", videoId], // Include videoId in the queryKey
         queryFn: async () =>
             await axios
-                .get(`/api/github?githubId=${githubId}`)
+                .get(`/api/youtube?videoId=${videoId}`)
                 .then((res) => res.data),
         staleTime: 60 * 1000,
         retry: 3,
@@ -58,7 +55,7 @@ export const ViewAnalytics = () => {
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setGitHubId(inputGithubId);
+        setVideoId(inputVideoId as string);
     };
 
     if (isLoading) return <Skeleton />;
@@ -66,10 +63,10 @@ export const ViewAnalytics = () => {
     if (isError) return "error...";
 
     const chartData = [
-        { name: "x", value: data?.viewCount },
-        { name: "x", value: data?.likeCount },
-        { name: "x", value: data?.favoriteCount },
-        { name: "x", value: data?.commentCount },
+        { name: "Views", value: data?.viewCount },
+        { name: "Likes", value: data?.likeCount },
+        { name: "Favorites", value: data?.favoriteCount },
+        { name: "Comments", value: data?.commentCount },
     ];
     const totalNum = (data?.commentCount || 0) + (data?.viewCount || 0) + (data?.favoriteCount || 0) + (data?.likeCount || 0);
     return (
@@ -79,9 +76,9 @@ export const ViewAnalytics = () => {
                     <form onSubmit={onSubmit} className="w-full ">
                         <div className="flex items-center space-x-4 justify-center">
                             <Input
-                                value={inputGithubId}
+                                value={inputVideoId}
                                 placeholder="Youtube ID"
-                                onChange={(e) => setInputGithubId(e.target.value)}
+                                onChange={(e) => setInputVideoId(e.target.value)}
                                 type="text"
                                 className="w-full lg:w-[20rem]"
                             />
@@ -118,7 +115,7 @@ export const ViewAnalytics = () => {
                         <TabsContent value="overview">
                             <div className="w-full p-4 grid gap-4">
                                 <div className="relative group">
-                                    <YoutubeLite id={githubId} thumbnail={""} title={""} />
+                                    <YoutubeLite id={videoId} thumbnail={""} title={""} />
                                 </div>
                                 <div className="space-y-2">
                                     <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">

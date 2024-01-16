@@ -1,9 +1,9 @@
 import React from 'react'
-import { ViewAnalytics } from './ViewAnalytics'
+import { ViewAnalyticsGithub } from './VewAnalytics'
 
 const GithubPage = () => {
   return (
-    <div><ViewAnalytics/></div>
+    <div><ViewAnalyticsGithub/></div>
   )
 }
 

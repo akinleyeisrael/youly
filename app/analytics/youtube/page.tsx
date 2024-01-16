@@ -1,14 +1,14 @@
 import React from 'react'
 import { getVideoAnalytics } from '@/lib/actions'
 import { useAtom } from 'jotai';
-import { ViewAnalytics } from './VewAnalytics';
+import { ViewAnalyticsYoutube } from './ViewAnalytics';
 
 
 const YoutubePage = async () => {
 
     return (
         <div>
-            <ViewAnalytics/>
+            <ViewAnalyticsYoutube/>
         </div>
     )
 }

@@ -1,4 +1,3 @@
-import prisma from "@/lib/client";
 import { NextRequest, NextResponse } from "next/server";
 import { Configuration, OpenAIApi } from "openai-edge";
 import { OpenAIStream, StreamingTextResponse } from "ai";
