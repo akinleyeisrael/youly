@@ -3,20 +3,20 @@ import { useSidebar } from "@/lib/sidebarContext";
 import {
     Cross1Icon,
     DashboardIcon,
-    HomeIcon
+    HomeIcon,
+    LockClosedIcon,
+    LockOpen1Icon
 } from "@radix-ui/react-icons";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { AnimatePresence, motion } from 'framer-motion';
-
+import { AiFillApi, AiFillGithub, AiFillLock, AiFillYoutube, AiOutlineLock, AiOutlinePoweroff } from "react-icons/ai";
 
 export const SidebarNav = () => {
 
     const { isOpen, toggleSidebar } = useSidebar();   //false by default
     const sidebarRef = useRef<HTMLDivElement | null>(null);
-
-
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -32,12 +32,9 @@ export const SidebarNav = () => {
     }, [isOpen, toggleSidebar]);
 
     const links = [
-        { label: "Dashboard", href: "/analytics/dashboard", icon: HomeIcon },
-        { label: "Dashboard", href: "/analytics/dashboard", icon: HomeIcon },
-        { label: "Dashboard", href: "/analytics/dashboard", icon: HomeIcon },
+        { label: "youtube", href: "/analytics/youtube", icon: AiFillYoutube},
+        { label: "Github", href: "/analytics/github", icon: AiFillGithub },
     ];
-
-
 
     return (
         //make this sidebar open
@@ -64,6 +61,7 @@ export const SidebarNav = () => {
                                         className="flex items-center gap-4 px-6 py-2 rounded-lg text-muted-foreground hover:bg-background hover:shadow-sm hover:text-primary"
                                         href={link.href}
                                     >
+                                        
                                         <Icon className="h-4 w-4" />
                                         <span>{link.label}</span>
                                     </Link>

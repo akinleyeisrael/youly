@@ -1,12 +1,10 @@
 import React from 'react'
-import { DashboardForm } from './form'
 import { getVideoAnalytics } from '@/lib/actions'
 import { useAtom } from 'jotai';
-import { analyticsAtom } from '@/lib/atoms';
 import { ViewAnalytics } from './VewAnalytics';
 
 
-const Dashboard = async () => {
+const YoutubePage = async () => {
 
     return (
         <div>
@@ -15,4 +13,4 @@ const Dashboard = async () => {
     )
 }
 
-export default Dashboard
+export default YoutubePage

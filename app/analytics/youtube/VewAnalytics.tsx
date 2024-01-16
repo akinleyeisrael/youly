@@ -25,10 +25,13 @@ import {
     YAxis
 } from "recharts";
 import { AiOutlineComment, AiOutlineLike, AiOutlineMessage, AiOutlineVideoCamera } from "react-icons/ai"
-import YoutubeLite from "@/components/ui/YoutubeLite";
+import YoutubeLite from "@/lib/YoutubeLite";
 import React from "react";
 import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
+import { useAtom } from "jotai";
+import { githubAtom } from "@/lib/atoms";
+
 
 interface YoutubeResource {
     viewCount: number;
@@ -38,14 +41,14 @@ interface YoutubeResource {
 }
 
 export const ViewAnalytics = () => {
-    const { videoId, setVideoId } = useVideoId();
-    const [inputVideoId, setInputVideoId] = useState("");
+    const [githubId, setGitHubId] = useAtom(githubAtom)
+    const [inputGithubId, setInputGithubId] = useState("");
 
     const { data, isLoading, isError, isPending } = useQuery<YoutubeResource>({
-        queryKey: ["viewCount", videoId], // Include videoId in the queryKey
+        queryKey: ["viewCount", githubId], // Include videoId in the queryKey
         queryFn: async () =>
             await axios
-                .get(`/api/youtube?videoId=${videoId}`)
+                .get(`/api/github?githubId=${githubId}`)
                 .then((res) => res.data),
         staleTime: 60 * 1000,
         retry: 3,
@@ -55,7 +58,7 @@ export const ViewAnalytics = () => {
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setVideoId(inputVideoId as string);
+        setGitHubId(inputGithubId);
     };
 
     if (isLoading) return <Skeleton />;
@@ -63,10 +66,10 @@ export const ViewAnalytics = () => {
     if (isError) return "error...";
 
     const chartData = [
-        { name: "Views", value: data?.viewCount },
-        { name: "Likes", value: data?.likeCount },
-        { name: "Favorites", value: data?.favoriteCount },
-        { name: "Comments", value: data?.commentCount },
+        { name: "x", value: data?.viewCount },
+        { name: "x", value: data?.likeCount },
+        { name: "x", value: data?.favoriteCount },
+        { name: "x", value: data?.commentCount },
     ];
     const totalNum = (data?.commentCount || 0) + (data?.viewCount || 0) + (data?.favoriteCount || 0) + (data?.likeCount || 0);
     return (
@@ -76,9 +79,9 @@ export const ViewAnalytics = () => {
                     <form onSubmit={onSubmit} className="w-full ">
                         <div className="flex items-center space-x-4 justify-center">
                             <Input
-                                value={inputVideoId}
+                                value={inputGithubId}
                                 placeholder="Youtube ID"
-                                onChange={(e) => setInputVideoId(e.target.value)}
+                                onChange={(e) => setInputGithubId(e.target.value)}
                                 type="text"
                                 className="w-full lg:w-[20rem]"
                             />
@@ -92,8 +95,8 @@ export const ViewAnalytics = () => {
                             <XAxis dataKey="name" />
                             <YAxis />
                             <Tooltip />
-                            <Legend/>
-                            <Bar dataKey="value" fill="hsl(var(--mountain_meadow))" />
+                            <Legend />
+                            <Bar dataKey="value" fill="hsl(var(--mountainmeadow))" />
                         </BarChart>
                     </ResponsiveContainer>
 
@@ -115,7 +118,7 @@ export const ViewAnalytics = () => {
                         <TabsContent value="overview">
                             <div className="w-full p-4 grid gap-4">
                                 <div className="relative group">
-                                    <YoutubeLite id={videoId} thumbnail={""} title={""} />
+                                    <YoutubeLite id={githubId} thumbnail={""} title={""} />
                                 </div>
                                 <div className="space-y-2">
                                     <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">

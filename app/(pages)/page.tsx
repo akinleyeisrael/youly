@@ -6,7 +6,7 @@ export default function Home() {
     <>
       <div className="flex flex-col items-center mx-auto justify-center mt-4 space-y-6">
         <h1>Youly - A data analytic app for your youtube videos</h1>
-        <Link href={"/analytics/dashboard"}> 
+        <Link href={"/analytics/youtube"}> 
           <p>Get Started</p>
         </Link>
       </div>
