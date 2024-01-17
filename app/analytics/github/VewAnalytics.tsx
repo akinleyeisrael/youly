@@ -9,7 +9,7 @@ import { githubAtom } from "@/lib/atoms";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useAtom } from "jotai";
-import React, { useState } from "react";
+import React, { FormEvent, useState } from "react";
 import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
 import {
     Bar,
@@ -36,7 +36,7 @@ export const ViewAnalyticsGithub = () => {
     const [username, setUsername] = useAtom(githubAtom);
     const [inputUsername, setUserInputname] = useState("");
 
-    const { data, isLoading, isError, isPending } = useQuery<GithubResource>({
+    const { data, isLoading, isError, isPending } = useQuery({
         queryKey: ["github", username], // Include videoId in the queryKey
         queryFn: async () =>
             await axios
@@ -48,7 +48,7 @@ export const ViewAnalyticsGithub = () => {
 
     console.log(data);
 
-    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setUsername(inputUsername);
     };
@@ -58,11 +58,11 @@ export const ViewAnalyticsGithub = () => {
     if (isError) return "error...";
 
     const chartData = [
-        { name: "Followers", value: data?.followers },
-        { name: "Repositories", value: data?.numRepos },
-        { name: "Total Stars", value: data?.totalStars },
-        { name: "Forks Count", value: data?.forksCount },
-        { name: "Open Issues", value: data?.openIssues },
+        { name: "Followers", value: data?.followers || 0 },
+        { name: "Repositories", value: data?.numRepos || 0 },
+        { name: "Total Stars", value: data?.totalStars || 0 },
+        { name: "Forks Count", value: data?.forksCount || 0 },
+        { name: "Open Issues", value: data?.openIssues || 0 },
     ];
 
     const analytics = [
