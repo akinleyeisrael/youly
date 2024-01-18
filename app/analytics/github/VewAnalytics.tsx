@@ -9,7 +9,8 @@ import { githubAtom } from "@/lib/atoms";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useAtom } from "jotai";
-import React, { FormEvent, useState } from "react";
+import Link from "next/link";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
 import {
     Bar,
@@ -25,6 +26,8 @@ import {
 } from "recharts";
 
 interface GithubResource {
+    login: string,
+    url: string,
     followers: number;
     numRepos: number;
     totalStars: number;
@@ -33,25 +36,34 @@ interface GithubResource {
 }
 
 export const ViewAnalyticsGithub = () => {
-    const [username, setUsername] = useAtom(githubAtom);
     const [inputUsername, setUserInputname] = useState("");
 
-    const { data, isLoading, isError, isPending } = useQuery({
-        queryKey: ["github", username], // Include videoId in the queryKey
+    const { data, isLoading, isError, refetch } = useQuery<GithubResource>({
+        queryKey: ["github", inputUsername], // Include videoId in the queryKey
         queryFn: async () =>
             await axios
-                .get(`/api/github?username=${username}`)
+                .get(`/api/github?username=${inputUsername}`)
                 .then((res) => res.data),
         staleTime: 60 * 1000,
         retry: 3,
+        enabled: false, // Ensure the query is only enabled when a valid username 
     });
+
+
 
     console.log(data);
 
-    const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setUsername(inputUsername);
+        refetch();
+
+        console.log("req", data)
+        const response = await axios.post('/api/analyze', data)
     };
+
+    const onChangeInputGithubName = (e: ChangeEvent<HTMLInputElement>) => {
+        setUserInputname(e.target.value)
+    }
 
     if (isLoading) return <Skeleton />;
 
@@ -66,22 +78,23 @@ export const ViewAnalyticsGithub = () => {
     ];
 
     const analytics = [
-        { id: 1, name: "Transactions every 24 hours", value: "44 million" },
-        { id: 2, name: "Assets under holding", value: "$119 trillion" },
-        { id: 3, name: "New users annually", value: "46,000" },
+        { id: 1, name: "Followers", value: data?.followers },
+        { id: 2, name: "Repositories", value: data?.numRepos },
+        { id: 3, name: "Total Stars", value: data?.totalStars },
+        { id: 3, name: "Fork Count", value: data?.forksCount },
+        { id: 3, name: "Open Issues", value: data?.openIssues },
     ];
 
-    const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
     return (
-        <div className="mx-auto items-center flex flex-col pl-4 lg:pl-32 xl:pl-[20rem]">
-            <Card className="w-full lg:w-[72rem] mt-16 mx-auto items-center flex-1 px-5">
+        <div className="mx-auto items-center flex flex-col px-4 lg:pl-32 xl:pl-[19rem] bg-secondary">
+            <Card className="w-full lg:w-[74rem] mt-16 mx-10 items-center flex-1 px-5 lg:mt-16">
                 <div className="mt-8 lg:mt-[2rem]">
                     <form onSubmit={onSubmit} className="w-full ">
-                        <div className="flex items-center space-x-4 justify-center">
+                        <div className="flex items-center space-x-2 justify-center">
                             <Input
                                 value={inputUsername}
                                 placeholder="Github username"
-                                onChange={(e) => setUserInputname(e.target.value)}
+                                onChange={onChangeInputGithubName}
                                 type="text"
                                 className="w-full lg:w-[20rem]"
                             />
@@ -89,55 +102,30 @@ export const ViewAnalyticsGithub = () => {
                         </div>
                     </form>
                 </div>
-                <div className="mt-8">
-                    {/* <ResponsiveContainer width="100%" height={200}>
-                        <PieChart width={800} height={400}>
+                <div className="">
+                    <ResponsiveContainer width="100%" height={300}>
+                        <PieChart width={400} height={400}>
                             <Pie
+                                dataKey="value"
+                                isAnimationActive={false}
                                 data={chartData}
-                                cx={120}
-                                cy={200}
-                                innerRadius={60}
+                                cx="50%"
+                                cy="50%"
                                 outerRadius={80}
                                 fill="#8884d8"
-                                paddingAngle={5}
-                                dataKey="value"
-                            >
-                                {chartData.map((entry, index) => (
-                                    <Cell
-                                        key={`cell-${index}`}
-                                        fill={COLORS[index % COLORS.length]}
-                                    />
-                                ))}
-                            </Pie>
-                            <Pie
-                                data={chartData}
-                                cx={420}
-                                cy={200}
-                                startAngle={180}
-                                endAngle={0}
-                                innerRadius={60}
-                                outerRadius={80}
-                                fill="#8884d8"
-                                paddingAngle={5}
-                                dataKey="value"
-                            >
-                                {chartData.map((entry, index) => (
-                                    <Cell
-                                        key={`cell-${index}`}
-                                        fill={COLORS[index % COLORS.length]}
-                                    />
-                                ))}
-                            </Pie>
+                                label
+                            />
+                            <Pie dataKey="value" data={chartData} cx={500} cy={200} innerRadius={40} outerRadius={80} fill="#82ca9d" />
+                            <Tooltip />
                         </PieChart>
-                    </ResponsiveContainer> */}
+                    </ResponsiveContainer>
 
-                    <ResponsiveContainer width="100%" height={200}>
+                    <ResponsiveContainer width="100%" height={200} className={'pt-2'}>
                         <BarChart data={chartData}>
                             <XAxis dataKey="name" />
                             <YAxis />
                             <Tooltip />
-                            <Legend />
-                            <Bar dataKey="value" fill="hsl(var(--mountainmeadow))" />
+                            <Bar dataKey="value" className="bg-mountainmeadow" fill="hsl(var(--mountain-meadow))" />
                         </BarChart>
                     </ResponsiveContainer>
 
@@ -148,7 +136,15 @@ export const ViewAnalyticsGithub = () => {
                         </TabsList>
 
                         <TabsContent value="analytics">
-                            <div className="bg-white py-24 sm:py-32">
+                            <div className="bg-primary-foreground py-24 sm:py-10 rounded-md">
+                                <div className="text-center mb-20">
+                                    <h1 className="font-bold">{data?.login}</h1>
+                                    {data?.url &&
+                                        <Link href={data?.url} className="hover:cursor-pointer text-muted-foreground">
+                                            <p>{data?.url}</p>
+                                        </Link>
+                                    }
+                                </div>
                                 <div className="mx-auto max-w-7xl px-6 lg:px-8">
                                     <dl className="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-3">
                                         {analytics.map((stat) => (
@@ -156,10 +152,10 @@ export const ViewAnalyticsGithub = () => {
                                                 key={stat.id}
                                                 className="mx-auto flex max-w-xs flex-col gap-y-4"
                                             >
-                                                <dt className="text-base leading-7 text-gray-600">
+                                                <dt className="text-base leading-7 text-primary">
                                                     {stat.name}
                                                 </dt>
-                                                <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
+                                                <dd className="order-first text-3xl font-semibold tracking-tight sm:text-5xl">
                                                     {stat.value}
                                                 </dd>
                                             </div>
@@ -168,7 +164,11 @@ export const ViewAnalyticsGithub = () => {
                                 </div>
                             </div>
                         </TabsContent>
-                        <TabsContent value="ai">23333333333</TabsContent>
+                        <TabsContent value="ai">
+                            <div className="h-60 text-center">
+                                needs open ai api key
+                            </div>
+                        </TabsContent>
                     </Tabs>
                 </div>
             </Card>

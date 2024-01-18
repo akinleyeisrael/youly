@@ -34,8 +34,10 @@
 
     --radius: 0.5rem;
 
-    --mountain_meadow: (168, 76%, 36%);
-    --mountain_meadow-foreground: (168, 76%, 36%);
+    --mountain-meadow: 168, 76%, 36%;
+    --mountain-meadow-foreground: 168, 76%, 36%;
+
+
   }
 
   .dark {
@@ -67,8 +69,8 @@
     --input: 0 0% 14.9%;
     --ring: 0 0% 83.1%;
 
-    --mountain_meadow: 168, 76%, 36%;
-    --mountain_meadow-foreground: 168, 76%, 36%;
+    --mountain-meadow: 168, 76%, 36%;
+    --mountain-meadow-foreground: 168, 76%, 36%;
   }
 }
 

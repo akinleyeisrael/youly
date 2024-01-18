@@ -6,6 +6,7 @@ export async function GET(request: NextRequest) {
     try {
         const videoId = request.nextUrl.searchParams.get('videoId');
         console.log("url params search", videoId);
+        
 
         const response = await axios.get(
             "https://www.googleapis.com/youtube/v3/videos/",

@@ -38,10 +38,10 @@ export const SidebarNav = () => {
 
     return (
         //make this sidebar open
-        <div ref={sidebarRef} className={`sidebar ${isOpen ? "sidebar-block" : "hidden"} sm:block w-[320px] fixed left-0 top-0 bg-secondary text-primary`}>
+        <div ref={sidebarRef} className={`sidebar ${isOpen ? "sidebar-block" : "hidden"} sm:block w-[310px] fixed left-0 top-0 bg-secondary  text-primary`}>
             <div className="h-screen flex flex-col">
                 <div className="flex items-center justify-between h-20 px-8">
-                    <Link className="flex items-center gap-2 font-semibold" href="#">
+                    <Link className="flex items-center gap-2 font-semibold" href="/">
                         <DashboardIcon className="h-24 w-8 text-primary" />
                         <span className="">
                             Youly <p className="text-muted-foreground text-xs">analytics</p>

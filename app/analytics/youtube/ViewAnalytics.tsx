@@ -38,24 +38,25 @@ interface GithubResource {
 }
 
 export const ViewAnalyticsYoutube = () => {
-    const { videoId, setVideoId } = useVideoId();
+    // const { videoId, setVideoId } = useVideoId();
     const [inputVideoId, setInputVideoId] = useState("");
 
-    const { data, isLoading, isError, isPending } = useQuery<GithubResource>({
-        queryKey: ["viewCount", videoId], // Include videoId in the queryKey
+    const { data, isLoading, isError, refetch } = useQuery<GithubResource>({
+        queryKey: ["viewCount", inputVideoId], // Include videoId in the queryKey
         queryFn: async () =>
             await axios
-                .get(`/api/youtube?videoId=${videoId}`)
+                .get(`/api/youtube?videoId=${inputVideoId}`)
                 .then((res) => res.data),
         staleTime: 60 * 1000,
         retry: 3,
+        enabled: false
     });
 
 
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setVideoId(inputVideoId as string);
+        refetch()
     };
 
     if (isLoading) return <Skeleton />;
@@ -65,116 +66,90 @@ export const ViewAnalyticsYoutube = () => {
     const chartData = [
         { name: "Views", value: data?.viewCount },
         { name: "Likes", value: data?.likeCount },
-        { name: "Favorites", value: data?.favoriteCount },
         { name: "Comments", value: data?.commentCount },
+        { name: "Favorites", value: data?.favoriteCount },
     ];
-    const totalNum = (data?.commentCount || 0) + (data?.viewCount || 0) + (data?.favoriteCount || 0) + (data?.likeCount || 0);
+    const analytics = [
+        { id: 1, name: "Views", value: data?.viewCount },
+        { id: 2, name: "Likes", value: data?.likeCount },
+        { id: 3, name: "Comments", value: data?.commentCount },
+        { id: 3, name: "Favorites", value: data?.favoriteCount },
+    ];
     return (
-        <div className="mx-auto items-center flex flex-col pl-4 lg:pl-32 xl:pl-[20rem]">
-            <Card className="w-full lg:w-[72rem] mt-16 mx-auto items-center flex-1 px-5">
-                <div className="mt-8 lg:mt-[2rem]">
-                    <form onSubmit={onSubmit} className="w-full ">
-                        <div className="flex items-center space-x-4 justify-center">
-                            <Input
-                                value={inputVideoId}
-                                placeholder="Youtube ID"
-                                onChange={(e) => setInputVideoId(e.target.value)}
-                                type="text"
-                                className="w-full lg:w-[20rem]"
-                            />
-                            <Button type="submit">Search</Button>
-                        </div>
-                    </form>
-                </div>
-                <div className="mt-8">
-                    <ResponsiveContainer width="100%" height={200}>
-                        <BarChart data={chartData}>
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend />
-                            <Bar dataKey="value" fill="hsl(var(--mountainmeadow))" />
-                        </BarChart>
-                    </ResponsiveContainer>
+        <div className="mx-auto items-center flex flex-col px-4 lg:pl-32 xl:pl-[19rem] bg-secondary">
+            <Card className="w-full lg:w-[74rem] mt-16 mx-10 items-center flex-1 px-5 lg:mt-16">
+                <div className="flex-1 items-center justify-center">
 
-                    <ResponsiveContainer width="100%" height={200}>
-                        <LineChart data={chartData}>
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <Tooltip />
-                            <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
-                        </LineChart>
-                    </ResponsiveContainer>
-
-                    <Tabs defaultValue="overview" className="pt-4">
-                        <TabsList className="grid w-full grid-cols-3">
-                            <TabsTrigger value="overview">Overview</TabsTrigger>
-                            <TabsTrigger value="analytics">Video Analytics</TabsTrigger>
-                            <TabsTrigger value="ai">AI Analysis</TabsTrigger>
-                        </TabsList>
-                        <TabsContent value="overview">
-                            <div className="w-full p-4 grid gap-4">
-                                <div className="relative group">
-                                    <YoutubeLite id={videoId} thumbnail={""} title={""} />
-                                </div>
-                                <div className="space-y-2">
-                                    <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-
-                                        <div className="flex items-center gap-1">
-                                            <EyeOpenIcon className="h-4 w-4" />
-                                            <span>{data?.viewCount} views</span>
-                                        </div>
-                                        <div className="flex items-center gap-1">
-                                            <HeartIcon className="h-4 w-4" />
-                                            <span>{data?.likeCount} likes</span>
-                                        </div>
-                                        <div className="flex items-center gap-1">
-                                            <TextIcon className="h-4 w-4" />
-                                            <span>{data?.commentCount} comments</span>
-                                        </div>
-                                    </div>
-                                </div>
-
+                    <div className="mt-8 lg:mt-[2rem]">
+                        <form onSubmit={onSubmit} className="w-full ">
+                            <div className="flex items-center space-x-4 justify-center">
+                                <Input
+                                    value={inputVideoId}
+                                    placeholder="Youtube ID"
+                                    onChange={(e) => setInputVideoId(e.target.value)}
+                                    type="text"
+                                    className="w-full lg:w-[20rem]"
+                                />
+                                <Button type="submit" variant={"default"} className="rounded-2xl">Search</Button>
                             </div>
+                        </form>
+                    </div>
+                    <div className="">
 
-                        </TabsContent>
-                        <TabsContent value="analytics">
-                            <div className="w-full p-10 grid gap-10">
-                                <div className="flex flex-col items-center space-y-0 gap-4 p-0">
-                                    <div className="grid gap-1 text-center">
-                                        <p className="text-xs">Views, Likes, Comments, favorites</p>
-                                    </div>
-                                    <div className="bg-gray-100 px-3 rounded-full flex items-center py-2 dark:bg-gray-800">
-                                        <AiOutlineVideoCamera className="w-6 h-6 fill-primary" />
-                                        <span className="text-sm ml-4 text-gray-500 dark:text-gray-400">{totalNum}</span>
-                                    </div>
-                                    <div className="p-0 grid gap-4">
-                                        <div className="flex items-center gap-4 text-sm">
-                                            <div className="flex gap-2 items-center">
-                                                <HeartIcon className="w-4 h-4 shrink-0 fill-primary" />
-                                                <span className="text-gray-500 dark:text-gray-400">{data?.viewCount}</span>
-                                            </div>
-                                            <div className="flex gap-2 items-center">
-                                                <HeartIcon className="w-4 h-4 shrink-0 fill-primary" />
-                                                <span className="text-gray-500 dark:text-gray-400">{data?.likeCount}</span>
-                                            </div>
-                                            <div className="flex gap-2 items-center">
-                                                <AiOutlineComment className="w-4 h-4 shrink-0 fill-primary" />
-                                                <span className="text-gray-500 dark:text-gray-400">{data?.commentCount}</span>
-                                            </div>
-                                            <div className="flex gap-2 items-center">
-                                                <StarIcon className="w-4 h-4 shrink-0 fill-primary" />
-                                                <span className="text-gray-500 dark:text-gray-400">{data?.favoriteCount}</span>
-                                            </div>
-                                        </div>
+                        <ResponsiveContainer width="100%" height={200} className={'mt-6'}>
+                            <BarChart data={chartData}>
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <Tooltip />
+                                <Bar dataKey="value" fill="hsl(var(--mountain-meadow))" />
+                            </BarChart>
+                        </ResponsiveContainer>
+
+                        <ResponsiveContainer width="100%" height={200}>
+                            <LineChart data={chartData}>
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <Tooltip />
+                                <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
+                            </LineChart>
+                        </ResponsiveContainer>
+
+                        <Tabs defaultValue="analytics" className="pt-4">
+                            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-2">
+                                <TabsTrigger value="analytics">Video Analytics</TabsTrigger>
+                                <TabsTrigger value="ai">AI Analysis</TabsTrigger>
+                            </TabsList>
+                            <TabsContent value="analytics">
+                                <div className="bg-primary-foreground py-24 sm:py-32">
+                                    <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                                        <dl className="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-3">
+                                            {analytics.map((stat) => (
+                                                <div
+                                                    key={stat.id}
+                                                    className="mx-auto flex max-w-xs flex-col gap-y-4"
+                                                >
+                                                    <dt className="text-base leading-7 ">
+                                                        {stat.name}
+                                                    </dt>
+                                                    <dd className="order-first text-3xl font-semibold tracking-tight ">
+                                                        {stat.value}
+                                                    </dd>
+                                                </div>
+                                            ))}
+                                        </dl>
                                     </div>
                                 </div>
-                            </div>
+                            </TabsContent>
+                            <TabsContent value="ai">
+                                <div className="h-60 text-center">
+                                    needs open ai api key
+                                </div>
+                            </TabsContent>
+                        </Tabs>
 
 
-                        </TabsContent>
-                        <TabsContent value="ai">23333333333</TabsContent>
-                    </Tabs>
+                    </div>
+
                 </div>
             </Card >
         </div >

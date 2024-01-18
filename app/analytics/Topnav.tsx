@@ -7,8 +7,10 @@ import {
     MagnifyingGlassIcon,
 } from "@radix-ui/react-icons";
 import { useAtom } from "jotai";
-import React from "react";
+import React, { useState } from "react";
 import { Rotate as Hamburger } from "hamburger-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { ModeToggle } from "@/components/ModeToggle";
 
 const Topnav = () => {
     const currentDate = new Date().toLocaleDateString("default", {
@@ -16,17 +18,18 @@ const Topnav = () => {
     });
 
     const { isOpen, toggleSidebar } = useSidebar();
+    const router = useRouter()
 
     return (
-        <div className="fixed bg-secondary text-muted-foreground flex max-w-[76rem] w-full mx-auto items-center justify-between px-4 py-2 space-x-2 sm:ml-[20rem]">
+        <div className="fixed  text-muted-foreground flex max-w-[76rem] w-full mx-auto items-center justify-between px-4 py-2 space-x-2 sm:ml-[18rem]">
             <div className="items-center flex space-x-2">
                 <div className="sm:hidden">
                     <Hamburger size={16} toggled={isOpen} toggle={toggleSidebar} />
                 </div>
-                <button className="bg-card p-2 rounded-xl hover:shadow-sm">
+                <button className="bg-card p-2 rounded-xl hover:shadow-sm" onClick={() => router.back()}>
                     <ArrowLeftIcon />
                 </button>
-                <button className="bg-card p-2 rounded-xl hover:shadow-sm">
+                <button className="bg-card p-2 rounded-xl hover:shadow-sm" onClick={() => router.forward()}>
                     <ArrowRightIcon />
                 </button>
                 <div className="pl-2 inline-flex items-center">
@@ -38,7 +41,7 @@ const Topnav = () => {
                 </div>
             </div>
             <div >
-                <MagnifyingGlassIcon />
+                <ModeToggle/>
             </div>
         </div>
     );
