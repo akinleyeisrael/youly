@@ -21,7 +21,7 @@ const Topnav = () => {
     const router = useRouter()
 
     return (
-        <div className="fixed  text-muted-foreground flex max-w-[76rem] w-full mx-auto items-center justify-between px-4 py-2 space-x-2 sm:ml-[18rem]">
+        <div className="fixed bg-background  text-muted-foreground  flex max-w-[76rem] w-full mx-auto items-center justify-between px-4 py-2 space-x-2 sm:ml-[18rem]">
             <div className="items-center flex space-x-2">
                 <div className="sm:hidden">
                     <Hamburger size={16} toggled={isOpen} toggle={toggleSidebar} />
@@ -40,7 +40,7 @@ const Topnav = () => {
                     {/* <DashboardForm /> */}
                 </div>
             </div>
-            <div >
+            <div className="">
                 <ModeToggle/>
             </div>
         </div>

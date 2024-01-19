@@ -2,12 +2,28 @@
 "use client";
 import { IconCommentDots, VideoIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useVideoId } from "@/lib/videoIdContext";
-import { BellIcon, BoxIcon, ClockIcon, EyeOpenIcon, HeartIcon, PlayIcon, Share1Icon, StarIcon, TextIcon } from "@radix-ui/react-icons";
+import {
+    BellIcon,
+    BoxIcon,
+    ClockIcon,
+    EyeOpenIcon,
+    HeartIcon,
+    PlayIcon,
+    Share1Icon,
+    StarIcon,
+    TextIcon,
+} from "@radix-ui/react-icons";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
@@ -22,13 +38,18 @@ import {
     ResponsiveContainer,
     Tooltip,
     XAxis,
-    YAxis
+    YAxis,
 } from "recharts";
-import { AiOutlineComment, AiOutlineLike, AiOutlineMessage, AiOutlineVideoCamera } from "react-icons/ai"
+import {
+    AiOutlineComment,
+    AiOutlineLike,
+    AiOutlineMessage,
+    AiOutlineVideoCamera,
+} from "react-icons/ai";
 import YoutubeLite from "@/lib/YoutubeLite";
 import React from "react";
-import LiteYouTubeEmbed from 'react-lite-youtube-embed';
-import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
+import LiteYouTubeEmbed from "react-lite-youtube-embed";
+import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
 
 interface GithubResource {
     viewCount: number;
@@ -49,14 +70,12 @@ export const ViewAnalyticsYoutube = () => {
                 .then((res) => res.data),
         staleTime: 60 * 1000,
         retry: 3,
-        enabled: false
+        enabled: false,
     });
-
-
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        refetch()
+        refetch();
     };
 
     if (isLoading) return <Skeleton />;
@@ -76,10 +95,9 @@ export const ViewAnalyticsYoutube = () => {
         { id: 3, name: "Favorites", value: data?.favoriteCount },
     ];
     return (
-        <div className="mx-auto items-center flex flex-col px-4 lg:pl-32 xl:pl-[19rem] bg-secondary">
-            <Card className="w-full lg:w-[74rem] mt-16 mx-10 items-center flex-1 px-5 lg:mt-16">
+        <div className="mx-auto items-center flex flex-col px-4 lg:pl-32 xl:pl-[19rem] bg-background">
+            <Card className="w-full lg:w-[74rem] mt-16 mx-10 items-center flex-1 px-5 lg:mt-16 bg-primary-foreground">
                 <div className="flex-1 items-center justify-center">
-
                     <div className="mt-8 lg:mt-[2rem]">
                         <form onSubmit={onSubmit} className="w-full ">
                             <div className="flex items-center space-x-4 justify-center">
@@ -90,13 +108,18 @@ export const ViewAnalyticsYoutube = () => {
                                     type="text"
                                     className="w-full lg:w-[20rem]"
                                 />
-                                <Button type="submit" variant={"default"} className="rounded-2xl">Search</Button>
+                                <Button
+                                    type="submit"
+                                    variant={"default"}
+                                    className="rounded-2xl"
+                                >
+                                    Search
+                                </Button>
                             </div>
                         </form>
                     </div>
                     <div className="">
-
-                        <ResponsiveContainer width="100%" height={200} className={'mt-6'}>
+                        <ResponsiveContainer width="100%" height={200} className={"mt-6"}>
                             <BarChart data={chartData}>
                                 <XAxis dataKey="name" />
                                 <YAxis />
@@ -110,7 +133,12 @@ export const ViewAnalyticsYoutube = () => {
                                 <XAxis dataKey="name" />
                                 <YAxis />
                                 <Tooltip />
-                                <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
+                                <Line
+                                    type="monotone"
+                                    dataKey="value"
+                                    stroke="#8884d8"
+                                    strokeWidth={2}
+                                />
                             </LineChart>
                         </ResponsiveContainer>
 
@@ -119,8 +147,8 @@ export const ViewAnalyticsYoutube = () => {
                                 <TabsTrigger value="analytics">Video Analytics</TabsTrigger>
                                 <TabsTrigger value="ai">AI Analysis</TabsTrigger>
                             </TabsList>
-                            <TabsContent value="analytics">
-                                <div className="bg-primary-foreground py-24 sm:py-32">
+                            <TabsContent value="analytics" className="bg-secondary">
+                                <div className="py-24 sm:py-32">
                                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
                                         <dl className="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-3">
                                             {analytics.map((stat) => (
@@ -128,9 +156,7 @@ export const ViewAnalyticsYoutube = () => {
                                                     key={stat.id}
                                                     className="mx-auto flex max-w-xs flex-col gap-y-4"
                                                 >
-                                                    <dt className="text-base leading-7 ">
-                                                        {stat.name}
-                                                    </dt>
+                                                    <dt className="text-base leading-7 ">{stat.name}</dt>
                                                     <dd className="order-first text-3xl font-semibold tracking-tight ">
                                                         {stat.value}
                                                     </dd>
@@ -140,25 +166,13 @@ export const ViewAnalyticsYoutube = () => {
                                     </div>
                                 </div>
                             </TabsContent>
-                            <TabsContent value="ai">
-                                <div className="h-60 text-center">
-                                    needs open ai api key
-                                </div>
+                            <TabsContent value="ai" className="bg-secondary">
+                                <div className="h-60 text-center">needs open ai api key</div>
                             </TabsContent>
                         </Tabs>
-
-
                     </div>
-
                 </div>
-            </Card >
-        </div >
-
-
-
-
-
-
-
+            </Card>
+        </div>
     );
 };

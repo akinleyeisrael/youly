@@ -1,11 +1,13 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { githubAtom } from "@/lib/atoms";
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useAtom } from "jotai";
@@ -49,16 +51,13 @@ export const ViewAnalyticsGithub = () => {
         enabled: false, // Ensure the query is only enabled when a valid username 
     });
 
-
-
     console.log(data);
+    console.log(inputUsername, "inputusername")
 
     const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         refetch();
-
-        console.log("req", data)
-        const response = await axios.post('/api/analyze', data)
+        await axios.post('/api/analyze', data)
     };
 
     const onChangeInputGithubName = (e: ChangeEvent<HTMLInputElement>) => {
@@ -67,7 +66,18 @@ export const ViewAnalyticsGithub = () => {
 
     if (isLoading) return <Skeleton />;
 
-    if (isError) return "error...";
+    if (isError) {
+        return (
+            <Alert variant="destructive">
+                <ExclamationTriangleIcon className="h-4 w-4" />
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>
+                    Your session has expired. Please log in again.
+                </AlertDescription>
+            </Alert>
+        )
+    }
+
 
     const chartData = [
         { name: "Followers", value: data?.followers || 0 },
@@ -86,8 +96,8 @@ export const ViewAnalyticsGithub = () => {
     ];
 
     return (
-        <div className="mx-auto items-center flex flex-col px-4 lg:pl-32 xl:pl-[19rem] bg-secondary">
-            <Card className="w-full lg:w-[74rem] mt-16 mx-10 items-center flex-1 px-5 lg:mt-16">
+        <div className="mx-auto items-center flex flex-col px-4 lg:pl-32 xl:pl-[19rem] bg-background">
+            <Card className="w-full lg:w-[74rem] mt-16 mx-10 items-center flex-1 px-5 lg:mt-16 bg-primary-foreground">
                 <div className="mt-8 lg:mt-[2rem]">
                     <form onSubmit={onSubmit} className="w-full ">
                         <div className="flex items-center space-x-2 justify-center">
@@ -135,8 +145,8 @@ export const ViewAnalyticsGithub = () => {
                             <TabsTrigger value="ai">AI Analysis</TabsTrigger>
                         </TabsList>
 
-                        <TabsContent value="analytics">
-                            <div className="bg-primary-foreground py-24 sm:py-10 rounded-md">
+                        <TabsContent value="analytics" className="bg-secondary">
+                            <div className="py-24 sm:py-10 rounded-md">
                                 <div className="text-center mb-20">
                                     <h1 className="font-bold">{data?.login}</h1>
                                     {data?.url &&
@@ -164,7 +174,7 @@ export const ViewAnalyticsGithub = () => {
                                 </div>
                             </div>
                         </TabsContent>
-                        <TabsContent value="ai">
+                        <TabsContent value="ai" className="bg-secondary">
                             <div className="h-60 text-center">
                                 needs open ai api key
                             </div>
