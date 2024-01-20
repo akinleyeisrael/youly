@@ -106,7 +106,7 @@ export const ViewAnalyticsYoutube = () => {
                                     placeholder="Youtube ID"
                                     onChange={(e) => setInputVideoId(e.target.value)}
                                     type="text"
-                                    className="w-full lg:w-[20rem]"
+                                    className="w-full lg:w-[20rem] rounded-2xl"
                                 />
                                 <Button
                                     type="submit"

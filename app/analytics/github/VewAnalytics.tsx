@@ -106,7 +106,7 @@ export const ViewAnalyticsGithub = () => {
                                 placeholder="Github username"
                                 onChange={onChangeInputGithubName}
                                 type="text"
-                                className="w-full lg:w-[20rem]"
+                                className="w-full lg:w-[20rem] rounded-2xl"
                             />
                             <Button type="submit">Search</Button>
                         </div>

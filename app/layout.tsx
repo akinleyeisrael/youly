@@ -5,6 +5,7 @@ import JotaiProviders from "./JotaiProviders";
 import { ReactQueryProvider } from "./QueryClientProvider";
 import { Provider } from "jotai";
 import { ThemeProvider } from "@/components/theme-provider";
+import { AuthProvider } from "./AuthProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,20 +23,22 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <main>
-        <ThemeProvider
+
+          <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
-            disableTransitionOnChange
           >
-          <ReactQueryProvider>
-            <JotaiProviders>
-              {children}
-            </JotaiProviders>
-          </ReactQueryProvider>
+            <AuthProvider>
+              <ReactQueryProvider>
+                <JotaiProviders>
+                  {children}
+                </JotaiProviders>
+              </ReactQueryProvider>
+            </AuthProvider>
           </ThemeProvider>
         </main>
       </body>
-    </html>
+    </html >
   );
 }
