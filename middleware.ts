@@ -2,6 +2,6 @@ export { default } from 'next-auth/middleware';
 
 export const config = {
     matcher: [
-        // '/analytics/github',
+        '/analytics/github',
     ]
 }
