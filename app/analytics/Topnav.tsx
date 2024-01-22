@@ -9,7 +9,6 @@ import {
 } from "@radix-ui/react-icons";
 import { useAtom } from "jotai";
 import React, { useState } from "react";
-import { Rotate as Hamburger } from "hamburger-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ModeToggle } from "@/components/ModeToggle";
 
