@@ -1,56 +1,27 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
-import { IconCommentDots, VideoIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+    Card
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useVideoId } from "@/lib/videoIdContext";
-import {
-    BellIcon,
-    BoxIcon,
-    ClockIcon,
-    EyeOpenIcon,
-    HeartIcon,
-    PlayIcon,
-    Share1Icon,
-    StarIcon,
-    TextIcon,
-} from "@radix-ui/react-icons";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import Image from "next/image";
-import { useState } from "react";
+import { useSession } from "next-auth/react";
+import React, { useState } from "react";
+import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
 import {
     Bar,
     BarChart,
-    CartesianGrid,
-    Legend,
     Line,
     LineChart,
     ResponsiveContainer,
     Tooltip,
     XAxis,
-    YAxis,
+    YAxis
 } from "recharts";
-import {
-    AiOutlineComment,
-    AiOutlineLike,
-    AiOutlineMessage,
-    AiOutlineVideoCamera,
-} from "react-icons/ai";
-import YoutubeLite from "@/lib/YoutubeLite";
-import React from "react";
-import LiteYouTubeEmbed from "react-lite-youtube-embed";
-import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
-import { useSession } from "next-auth/react";
 
 interface GithubResource {
     viewCount: number;

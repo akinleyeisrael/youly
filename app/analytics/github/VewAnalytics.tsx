@@ -6,25 +6,21 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { githubAtom } from "@/lib/atoms";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useAtom } from "jotai";
 import Link from "next/link";
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
 import {
     Bar,
     BarChart,
-    Cell,
-    Legend,
     Pie,
     PieChart,
     ResponsiveContainer,
     Tooltip,
     XAxis,
-    YAxis,
+    YAxis
 } from "recharts";
 
 interface GithubResource {
