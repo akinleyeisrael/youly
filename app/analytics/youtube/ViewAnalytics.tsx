@@ -11,7 +11,6 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
-import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
 import {
     Bar,
     BarChart,
