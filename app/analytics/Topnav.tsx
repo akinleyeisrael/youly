@@ -4,6 +4,7 @@ import {
     ArrowLeftIcon,
     ArrowRightIcon,
     CalendarIcon,
+    HamburgerMenuIcon,
     MagnifyingGlassIcon,
 } from "@radix-ui/react-icons";
 import { useAtom } from "jotai";
@@ -21,10 +22,11 @@ const Topnav = () => {
     const router = useRouter()
 
     return (
-        <div className="fixed bg-background  text-muted-foreground  flex max-w-[76rem] w-full mx-auto items-center justify-between px-4 py-2 space-x-2 sm:ml-[18rem]">
+        <div className="fixed bg-background  text-muted-foreground  flex max-w-[76rem] w-full mx-auto items-center justify-between px-4 py-2 z-50 space-x-2 sm:ml-[18rem]">
             <div className="items-center flex space-x-2">
                 <div className="sm:hidden">
-                    <Hamburger size={16} toggled={isOpen} toggle={toggleSidebar} />
+                    <HamburgerMenuIcon onClick={toggleSidebar} className="w-10 h-6 hover:cursor-pointer" />
+                    {/* <Hamburger size={16} toggled={isOpen} toggle={toggleSidebar} /> */}
                 </div>
                 <button className="bg-card p-2 rounded-xl hover:shadow-sm" onClick={() => router.back()}>
                     <ArrowLeftIcon />
@@ -41,7 +43,7 @@ const Topnav = () => {
                 </div>
             </div>
             <div className="">
-                <ModeToggle/>
+                <ModeToggle />
             </div>
         </div>
     );

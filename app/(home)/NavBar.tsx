@@ -1,12 +1,16 @@
 "use client"
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
 import { useSession } from "next-auth/react";
 import { Skeleton } from '@/components/ui/skeleton';
 import { DropdownMenu, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel } from '@radix-ui/react-dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Signout from '../signout/Signout';
+import { HoveredLink, Menu, MenuItem, ProductItem } from '@/components/ui/nav-menu';
+import { cn } from '@/lib/utils';
+import { AuthStatus } from './AuthStatus';
+import { ModeToggle } from '@/components/ModeToggle';
 
 
 const links = [
@@ -16,55 +20,37 @@ const links = [
     { label: "company", href: "/company" },
 ]
 
-const NavBar = () => {
+
+function Navbar({ className }: { className?: string }) {
+    const [active, setActive] = useState<string | null>(null);
     return (
-        <>
-            <div className='flex py-3 border-b border justify-between'>
-                <div className='flex space-x-6 px-4 '>
-                    {links.map(link => (
-                        <ul key={link.href}>
-                            <li><Link href={link.href}>{link.label} </Link></li>
-                        </ul>
-                    ))}
-                </div>
-                <div>
-                    <AuthStatus />
-                </div>
-            </div>
-        </>
-    )
+        <div
+            className={cn("fixed top-10 inset-x-0 max-w-2xl mx-auto z-50 ", className)}
+        >
+            <Menu setActive={setActive}>
+                <MenuItem setActive={setActive} active={active} item="Home" >
+                    <div className="flex flex-col space-y-4 text-sm">
+                        <HoveredLink href="/">Home</HoveredLink>
+                
+                    </div>
+                </MenuItem>
+                <MenuItem setActive={setActive} active={active} item="Products">
+                <div className="flex flex-col space-y-4 text-sm">
+                        <HoveredLink href="/product">Product</HoveredLink>
+                
+                    </div>
+                </MenuItem>
+                <MenuItem setActive={setActive} active={active} item="Pricing">
+                    <div className="flex flex-col space-y-4 text-sm">
+                        <HoveredLink href="/pricing">Pricing</HoveredLink>
+                    </div>
+                </MenuItem>
+                
+            </Menu>
+        </div>
+    );
 }
 
-const AuthStatus = () => {
-    const { status, data: session } = useSession();
 
-    if (status == 'loading') return <Skeleton />
 
-    if (status === "unauthenticated")
-        return (
-            <Link className="nav-link" href="/signin">
-                Login
-            </Link>
-        );
-
-    return (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild className="text-sm pt-3">
-                <Avatar>
-                    <AvatarImage referrerPolicy='no-referrer' src={session!.user!.image!} />
-                    <AvatarFallback>{session?.user?.name}</AvatarFallback>
-                </Avatar>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-                <DropdownMenuLabel>
-                    {session?.user?.email}
-                </DropdownMenuLabel>
-                <DropdownMenuItem>
-                    <Signout />
-                </DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu >
-    )
-}
-
-export default NavBar
+export default Navbar

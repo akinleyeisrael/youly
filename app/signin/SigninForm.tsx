@@ -23,12 +23,12 @@ export const SigninForm = () => {
   }
 
   return (
-    <div className="h-screen w-screen bg-primary-foreground">
+    <div className="h-screen w-screen bg-background">
       <div
         className="fixed grid place-items-center backdrop-blur-sm top-0 right-0 left-0 z-50 w-full inset-0 h-modal h-full justify-center items-center">
         <div className="relative container m-auto px-6">
           <div className="m-auto md:w-7/12">
-            <div className="rounded-xl shadow-xl bg-card">
+            <div className="rounded-xl">
               <div className="p-8">
                 <div className="space-y-4">
                   <DashboardIcon />

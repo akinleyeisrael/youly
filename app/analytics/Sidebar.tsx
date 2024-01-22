@@ -12,6 +12,10 @@ import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { AnimatePresence, motion } from 'framer-motion';
 import { AiFillApi, AiFillGithub, AiFillLock, AiFillYoutube, AiOutlineLock, AiOutlinePoweroff } from "react-icons/ai";
+import { useSession } from "next-auth/react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
+import Signout from "../signout/Signout";
 
 export const SidebarNav = () => {
 
@@ -32,13 +36,16 @@ export const SidebarNav = () => {
     }, [isOpen, toggleSidebar]);
 
     const links = [
-        { label: "youtube", href: "/analytics/youtube", icon: AiFillYoutube},
+        { label: "youtube", href: "/analytics/youtube", icon: AiFillYoutube },
         { label: "Github", href: "/analytics/github", icon: AiFillGithub },
     ];
 
+    const { status, data: session } = useSession();
+
+
     return (
         //make this sidebar open
-        <div ref={sidebarRef} className={`sidebar ${isOpen ? "sidebar-block" : "hidden"} sm:block w-[310px]  fixed left-0 top-0 bg-background text-primary`}>
+        <div ref={sidebarRef} className={`sidebar ${isOpen ? "block" : "hidden"} sm:block w-[310px] z-50 fixed left-0 top-0 bg-background text-primary`}>
             <div className="h-screen flex flex-col">
                 <div className="flex items-center justify-between h-20 px-8">
                     <Link className="flex items-center gap-2 font-semibold" href="/">
@@ -61,7 +68,7 @@ export const SidebarNav = () => {
                                         className="flex items-center gap-4 px-6 py-2 rounded-lg text-muted-foreground hover:bg-secondary hover:shadow-sm hover:text-primary"
                                         href={link.href}
                                     >
-                                        
+
                                         <Icon className="h-4 w-4" />
                                         <span>{link.label}</span>
                                     </Link>
@@ -70,19 +77,33 @@ export const SidebarNav = () => {
                         })}
                     </ul>
                 </nav>
-                <div className="flex items-center justify-start h-16 px-6 border-t border-gray-700">
-                    <Image
-                        alt="Avatar"
-                        className="rounded-full"
-                        height="32"
-                        src="/placeholder.svg"
-                        style={{
-                            aspectRatio: "32/32",
-                            objectFit: "cover",
-                        }}
-                        width="32"
-                    />
-                    <span className="ml-3">User</span>
+                <div className="flex items-center justify-start h-16 px-6 border-t border-muted">
+                    {session ?
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild className="text-sm pt-1 mx-auto flex">
+                                <Avatar>
+                                    <AvatarImage className="rounded-full h-8 w-8" referrerPolicy='no-referrer' src={session!.user!.image!} />
+                                    <AvatarFallback>{session?.user?.name}</AvatarFallback>
+                                </Avatar>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuLabel>
+                                    {session?.user?.email}
+                                </DropdownMenuLabel>
+                                <DropdownMenuItem>
+                                    <Signout />
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu > : <div className="inline-flex items-center">
+                            <Image
+                                src="/youlylogo.png"
+                                alt="logo"
+                                className="rounded-xl"
+                                width='50'
+                                height='50' />
+                            <span className="ml-3">Guest</span>
+                        </div>
+                    }
                 </div>
             </div>
         </div>

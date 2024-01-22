@@ -50,6 +50,7 @@ import YoutubeLite from "@/lib/YoutubeLite";
 import React from "react";
 import LiteYouTubeEmbed from "react-lite-youtube-embed";
 import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
+import { useSession } from "next-auth/react";
 
 interface GithubResource {
     viewCount: number;
@@ -61,6 +62,7 @@ interface GithubResource {
 export const ViewAnalyticsYoutube = () => {
     // const { videoId, setVideoId } = useVideoId();
     const [inputVideoId, setInputVideoId] = useState("");
+    const { data: session } = useSession()
 
     const { data, isLoading, isError, refetch } = useQuery<GithubResource>({
         queryKey: ["viewCount", inputVideoId], // Include videoId in the queryKey
@@ -96,7 +98,7 @@ export const ViewAnalyticsYoutube = () => {
     ];
     return (
         <div className="mx-auto items-center flex flex-col px-4 lg:pl-32 xl:pl-[19rem] bg-background">
-            <Card className="w-full lg:w-[74rem] mt-16 mx-10 items-center flex-1 px-5 lg:mt-16 bg-primary-foreground">
+            <Card className="w-full lg:w-[74rem] mt-16 mx-10 items-center flex-1 px-5 lg:mt-16 bg-primary-foreground mb-2">
                 <div className="flex-1 items-center justify-center">
                     <div className="mt-8 lg:mt-[2rem]">
                         <form onSubmit={onSubmit} className="w-full ">
@@ -145,7 +147,9 @@ export const ViewAnalyticsYoutube = () => {
                         <Tabs defaultValue="analytics" className="pt-4">
                             <TabsList className="grid w-full grid-cols-2 sm:grid-cols-2">
                                 <TabsTrigger value="analytics">Video Analytics</TabsTrigger>
-                                <TabsTrigger value="ai">AI Analysis</TabsTrigger>
+                                {session &&
+                                    <TabsTrigger value="ai">AI Analysis</TabsTrigger>
+                                }
                             </TabsList>
                             <TabsContent value="analytics" className="bg-secondary">
                                 <div className="py-24 sm:py-32">

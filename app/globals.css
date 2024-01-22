@@ -92,3 +92,4 @@
 .sidebar-closed {
   transform: translateX(-100%); /* Move the sidebar off-screen when closed */
 }
+
