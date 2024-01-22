@@ -2,7 +2,7 @@ import React from 'react'
 
 const Pricingpage = () => {
     return (
-        <section className="flex items-center justify-center mt-[10rem] pb-10">
+        <section className="flex items-center justify-center mt-[5rem] pb-10">
             <div className="p-4 sm:px-10 flex flex-col justify-center items-center text-base h-100vh mx-auto" id="pricing">
                 <h3 className="text-5xl font-semibold text-center flex gap-2 justify-center mb-10">No Pay, use forever</h3>
                 <div className="isolate mx-auto grid max-w-md grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-2">

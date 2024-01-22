@@ -5,7 +5,7 @@ import React from 'react'
 const ProductPage = () => {
     return (
         <div className='mx-auto items-center max-w-2xl flex flex-col justify-center px-6'>
-            <div className='pt-[10rem]'>
+            <div className='pt-[5rem]'>
                 <Image
                     src={`/youlylogo.png`}
                     alt="jordans"
